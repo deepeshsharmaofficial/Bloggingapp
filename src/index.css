@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6, p, label {
+  color: #2f1c6a;
+}
+
+h1{
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.form-control {
+  color: #2f1c6a;
+}
+
+.section{
+  padding: 15px;
+  background-color: #f4f5ff;
+  border: 1px solid #d5dfff;
+  border-radius: 10px;
+  font-weight: bolder;
+}
+
+.blog{
+  margin-bottom: 20px;
+  background-color: #f4f5ff;
+  border-radius: 10px;
+  border: 1px solid #d5dfff;
+  padding: 20px;
+}
+
+label{
+  display: block;
+  padding: 2px;
+}
+
+textarea {
+  height: 160px;
+}
+
+.remove{
+  background-color: rgb(230, 83, 83);
+  width:fit-content
+}
+
+.blog-btn{
+  text-align: end;
+  margin-right: 10px;
+}
+
+/* Add Blog Button */
+
+.btn {
+  background-color: #673de6;
+  border: none;
+}
+
+.btn:hover {
+  background-color: #5025d1;
+}
+
+.btn:active {
+  background-color: #5025d1;
+}
