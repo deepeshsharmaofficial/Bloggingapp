@@ -1,10 +1,25 @@
 //Blogging App using Hooks
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function Blog(){
 
     const [formData, setFormData] = useState({title: "", content: ""});
     const [blogs, setBlogs] = useState([]);
+    const titleRef = useRef(null);
+
+    // Equivalent to ComponentDidMount
+    useEffect(() => {
+        titleRef.current.focus();
+    }, []);
+
+    // I just want the title to be changes when blogs are getting updated
+    useEffect(() => {
+        if(blogs.length && blogs[0].title) {
+            document.title = blogs[0].title;
+        } else {
+            document.title = "No Blogs!";
+        }
+    }, [blogs])
     
     //Passing the synthetic event as argument to stop refreshing the page on submit
     function handleSubmit(e){
@@ -12,12 +27,14 @@ export default function Blog(){
 
         setBlogs([{title : formData.title, content : formData.content}, ...blogs]);
         setFormData({title: "", content: ""});
+        titleRef.current.focus();
+
         console.log(blogs);
     }
 
     function removeBlog(i) {
         setBlogs(blogs.filter((blog, index) => i !== index));
-
+        
     }
 
     return(
@@ -38,7 +55,8 @@ export default function Blog(){
                             aria-label="Sizing example input" 
                             aria-describedby="inputGroup-sizing-lg"
                             value={formData.title}
-                            onChange={(e) => setFormData({title: e.target.value, content: formData.content})}        
+                            onChange={(e) => setFormData({title: e.target.value, content: formData.content})}
+                            ref={titleRef}        
                     />
                 </Row >
 
@@ -48,6 +66,7 @@ export default function Blog(){
                             className="form-control" 
                             aria-label="With textarea"
                             value={formData.content}
+                            required
                             onChange={(e) => setFormData({title: formData.title, content: e.target.value})}
                     />
                     
