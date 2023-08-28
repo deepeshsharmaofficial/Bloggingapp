@@ -50,11 +50,6 @@ textarea {
   height: 160px;
 }
 
-.remove{
-  background-color: rgb(230, 83, 83);
-  width:fit-content
-}
-
 .blog-btn{
   text-align: end;
   margin-right: 10px;
@@ -62,15 +57,16 @@ textarea {
 
 /* Add Blog Button */
 
-.btn {
+.btn-add {
   background-color: #673de6;
+  color: white;
   border: none;
 }
 
-.btn:hover {
+.btn-add:hover {
   background-color: #5025d1;
 }
 
-.btn:active {
+.btn-add:active {
   background-color: #5025d1;
 }

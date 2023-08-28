@@ -15,6 +15,11 @@ export default function Blog(){
         console.log(blogs);
     }
 
+    function removeBlog(i) {
+        setBlogs(blogs.filter((blog, index) => i !== index));
+
+    }
+
     return(
         <div className="container">
         {/* Heading of the page */}
@@ -49,7 +54,7 @@ export default function Blog(){
                 </Row >
 
                 {/* Button to submit the blog */}            
-                <button className = "btn btn-primary">Add Blog</button>
+                <button className = "btn btn-primary btn-add">Add Blog</button>
             </form>
                      
         </div>
@@ -65,9 +70,16 @@ export default function Blog(){
                     <div className="blog" key={index}>
                         <h3>{blog.title}</h3>
                         <p>{blog.content}</p>
+
+                        <div className="blog-btn">
+                            <button className = "btn btn-danger" onClick={() => removeBlog(index)}>
+                                Delete
+                            </button>
+                        </div>
+
                     </div>
                 ))}
-                
+
         </div>
         </div>
         )
