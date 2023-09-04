@@ -1,7 +1,7 @@
 //Blogging App using Hooks
 import { useState, useRef, useEffect, useReducer } from "react";
 import { db } from "../firebaseInit";
-import { collection, addDoc, getDocs, onSnapshot, doc, updateDoc, deleteField } from "firebase/firestore"; 
+import { collection, addDoc, getDocs, onSnapshot, doc, updateDoc, deleteField, deleteDoc } from "firebase/firestore"; 
 
 // function blogsReducer(currentState, action) {
 //     switch(action.type) {
@@ -86,9 +86,12 @@ export default function Blog(){
         console.log(blogs);
     }
 
-    function removeBlog(i) {
-        setBlogs(blogs.filter((blog, index) => i !== index));
+    async function removeBlog(i) {
+        // setBlogs(blogs.filter((blog, index) => i !== index));
         // dispatch({type: "REMOVE", index: i});
+
+        const docRef = doc(db, "blogs", i);
+        await deleteDoc(docRef);
     }
 
     return(
@@ -145,7 +148,7 @@ export default function Blog(){
                         <p>{blog.content}</p>
 
                         <div className="blog-btn">
-                            <button className = "btn btn-danger" onClick={() => removeBlog(index)}>
+                            <button className = "btn btn-danger" onClick={() => removeBlog(blog.id)}>
                                 Delete
                             </button>
                         </div>
