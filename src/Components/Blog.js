@@ -1,7 +1,7 @@
 //Blogging App using Hooks
 import { useState, useRef, useEffect, useReducer } from "react";
 import { db } from "../firebaseInit";
-import { collection, addDoc, getDocs } from "firebase/firestore"; 
+import { collection, addDoc, getDocs, onSnapshot, doc, updateDoc, deleteField } from "firebase/firestore"; 
 
 // function blogsReducer(currentState, action) {
 //     switch(action.type) {
@@ -38,8 +38,21 @@ export default function Blog(){
     }, [blogs])
 
     useEffect(() => {
-        async function fetchData() {
-            const querySnapshot = await getDocs(collection(db, "blogs"));
+        // async function fetchData() {
+        //     const querySnapshot = await getDocs(collection(db, "blogs"));
+        //     const blogs = querySnapshot.docs.map((doc) => {
+        //         return {
+        //             id: doc.id,
+        //             ...doc.data()
+        //         }
+        //     })
+        //     console.log("Blogs", blogs);
+        //     setBlogs(blogs);
+        // }
+        // fetchData();
+        
+        // Realtime Updates
+        onSnapshot(collection(db, "blogs"), (querySnapshot) => {
             const blogs = querySnapshot.docs.map((doc) => {
                 return {
                     id: doc.id,
@@ -48,9 +61,8 @@ export default function Blog(){
             })
             console.log("Blogs", blogs);
             setBlogs(blogs);
-        }
+        });
 
-        fetchData();
     }, [])
 
     //Passing the synthetic event as argument to stop refreshing the page on submit
