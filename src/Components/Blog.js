@@ -1,24 +1,25 @@
 //Blogging App using Hooks
 import { useState, useRef, useEffect, useReducer } from "react";
 import { db } from "../firebaseInit";
+import { collection, addDoc, getDocs } from "firebase/firestore"; 
 
-function blogsReducer(currentState, action) {
-    switch(action.type) {
-        case "ADD":
-            return [action.blog, ...currentState];
-        case "REMOVE":
-            return currentState.filter((blog, index) => action.index !== index);
-        default:
-            return [];
-    }
-}
+// function blogsReducer(currentState, action) {
+//     switch(action.type) {
+//         case "ADD":
+//             return [action.blog, ...currentState];
+//         case "REMOVE":
+//             return currentState.filter((blog, index) => action.index !== index);
+//         default:
+//             return [];
+//     }
+// }
 
 export default function Blog(){
 
     const [formData, setFormData] = useState({title: "", content: ""});
     
-    // const [blogs, setBlogs] = useState([]);
-    const [blogs, dispatch] = useReducer(blogsReducer, []);
+    const [blogs, setBlogs] = useState([]);
+    // const [blogs, dispatch] = useReducer(blogsReducer, []);
     
     const titleRef = useRef(null);
 
@@ -35,13 +36,37 @@ export default function Blog(){
             document.title = "No Blogs!";
         }
     }, [blogs])
-    
+
+    useEffect(() => {
+        async function fetchData() {
+            const querySnapshot = await getDocs(collection(db, "blogs"));
+            const blogs = querySnapshot.docs.map((doc) => {
+                return {
+                    id: doc.id,
+                    ...doc.data()
+                }
+            })
+            console.log("Blogs", blogs);
+            setBlogs(blogs);
+        }
+
+        fetchData();
+    }, [])
+
     //Passing the synthetic event as argument to stop refreshing the page on submit
-    function handleSubmit(e){
+    async function handleSubmit(e){
         e.preventDefault();
 
         // setBlogs([{title : formData.title, content : formData.content}, ...blogs]);
-        dispatch({type : "ADD", blog:{title : formData.title, content : formData.content}})
+        // dispatch({type : "ADD", blog:{title : formData.title, content : formData.content}})
+
+        // Add a new document with a generated id.
+        await addDoc(collection(db, "blogs"), {
+            title: formData.title,
+            content: formData.content,
+            createdOn: new Date()
+        });
+        // console.log("Document written with ID: ", docRef.id);  
 
         setFormData({title: "", content: ""});
         titleRef.current.focus();
@@ -50,8 +75,8 @@ export default function Blog(){
     }
 
     function removeBlog(i) {
-        // setBlogs(blogs.filter((blog, index) => i !== index));
-        dispatch({type: "REMOVE", index: i});
+        setBlogs(blogs.filter((blog, index) => i !== index));
+        // dispatch({type: "REMOVE", index: i});
     }
 
     return(
